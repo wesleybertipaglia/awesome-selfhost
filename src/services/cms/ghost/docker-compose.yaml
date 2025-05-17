@@ -1,0 +1,31 @@
+services:
+  ghost:
+    image: ghost:${GHOST_TAG}
+    container_name: ${GHOST_CONTAINER_NAME}
+    restart: ${RESTART_POLICY}
+    environment:
+      database__client: mysql
+      database__connection__host: ${DB_CONTAINER_NAME}
+      database__connection__user: ${DB_USER}
+      database__connection__password: ${DB_PASSWORD}
+      database__connection__database: ${DB_NAME}
+      url: http://${GHOST_HOST}
+    volumes:
+      - ghost-data:/var/lib/ghost/content
+    ports:
+      - '${GHOST_PORT}:2368'
+
+  db:
+    image: mysql:${DB_TAG}
+    container_name: ${DB_CONTAINER_NAME}
+    restart: ${RESTART_POLICY}
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - db-data:/var/lib/mysql
+    ports:
+      - '${DB_PORT}:3306'
+
+volumes:
+  ghost-data:
+  db-data:
