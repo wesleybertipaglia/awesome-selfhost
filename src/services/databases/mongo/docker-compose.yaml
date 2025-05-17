@@ -1,0 +1,16 @@
+services:
+  mongo:
+    image: mongo:latest
+    container_name: ${CONTAINER_NAME}
+    restart: ${RESTART_POLICY}
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
+    volumes:
+      - mongo-data:/data/db
+    ports:
+      - '${PORT}:27017'
+
+volumes:
+  mongo-data:
