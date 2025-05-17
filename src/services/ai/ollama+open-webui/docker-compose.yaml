@@ -1,0 +1,24 @@
+services:
+  ollama:
+    image: ollama/ollama:${OLLAMA_TAG}
+    container_name: ${OLLAMA_CONTAINER_NAME}
+    restart: ${RESTART_POLICY}
+    tty: true
+    volumes:
+      - ollama-data:/root/.ollama
+
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:${OPEN_WEBUI_TAG:-latest}
+    container_name: ${OPEN_WEBUI_CONTAINER_NAME}
+    restart: ${RESTART_POLICY}
+    depends_on:
+      - ollama
+    volumes:
+      - open-webui-data:/app/backend/data
+    environment:
+      - OLLAMA_BASE_URL=${OLLAMA_BASE_URL:-http://ollama:11434}
+      - WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY}
+
+volumes:
+  ollama-data:
+  open-webui-data:
