@@ -1,0 +1,12 @@
+services:
+  excalidraw:
+    image: excalidraw/excalidraw:latest
+    container_name: ${CONTAINER_NAME}
+    restart: ${RESTART_POLICY}
+    ports:
+      - '${PORT}:80'
+    volumes:
+      - excalidraw-data:/app/public
+
+volumes:
+  excalidraw-data:
