@@ -1,0 +1,7 @@
+services:
+  adminer:
+    image: adminer:latest
+    container_name: ${CONTAINER_NAME}
+    restart: ${RESTART_POLICY}
+    ports:
+      - '${PORT}:8080'
