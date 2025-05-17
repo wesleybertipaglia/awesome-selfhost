@@ -1,0 +1,32 @@
+services:
+  prometheus:
+    image: prom/prometheus:${PROMETHEUS_TAG}
+    container_name: ${PROMETHEUS_CONTAINER_NAME}
+    restart: ${RESTART_POLICY}
+    ports:
+      - "${PROMETHEUS_PORT}:9090"
+    volumes:
+      - prometheus-data:/prometheus
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+
+  grafana:
+    image: grafana/grafana:${GRAFANA_TAG}
+    container_name: ${GRAFANA_CONTAINER_NAME}
+    restart: ${RESTART_POLICY}
+    depends_on:
+      - prometheus
+    ports:
+      - "${GRAFANA_PORT}:3000"
+    volumes:
+      - grafana-data:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD}
+      - GF_SERVER_ROOT_URL=http://localhost:${GRAFANA_PORT}
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+
+volumes:
+  prometheus-data:
+  grafana-data:
