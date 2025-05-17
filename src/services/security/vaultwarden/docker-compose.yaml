@@ -1,0 +1,15 @@
+services:
+  vaultwarden:
+    image: vaultwarden/server:${TAG}
+    container_name: ${CONTAINER_NAME}
+    restart: ${RESTART_POLICY}
+    volumes:
+      - vaultwarden:/data
+    ports:
+      - '${PORT}:80'
+    environment:
+      DOMAIN: ${DOMAIN}
+      SIGNUPS_ALLOWED: ${SIGNUPS_ALLOWED}
+
+volumes:
+  vaultwarden:
