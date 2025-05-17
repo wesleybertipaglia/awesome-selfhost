@@ -1,0 +1,8 @@
+services:
+  watchtower:
+    image: containrrr/watchtower:${WATCHTOWER_TAG}
+    container_name: ${WATCHTOWER_CONTAINER_NAME}
+    restart: ${RESTART_POLICY}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: --cleanup --interval ${WATCHTOWER_INTERVAL}
