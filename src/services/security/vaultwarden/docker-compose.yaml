@@ -4,7 +4,7 @@ services:
     container_name: ${CONTAINER_NAME}
     restart: ${RESTART_POLICY}
     volumes:
-      - vaultwarden:/data
+      - vaultwarden-data:/data
     ports:
       - '${PORT}:80'
     environment:
@@ -12,4 +12,4 @@ services:
       SIGNUPS_ALLOWED: ${SIGNUPS_ALLOWED}
 
 volumes:
-  vaultwarden:
+  vaultwarden-data:
