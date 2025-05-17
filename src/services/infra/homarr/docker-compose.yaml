@@ -1,0 +1,14 @@
+services:
+  homarr:
+    image: ghcr.io/homarr-labs/homarr:${HOMARR_TAG}
+    container_name: ${HOMARR_CONTAINER_NAME}
+    restart: ${RESTART_POLICY}
+    volumes:
+      - homarr-data:/appdata
+    environment:
+      - SECRET_ENCRYPTION_KEY=${SECRET_ENCRYPTION_KEY}
+    ports:
+      - "${HOMARR_PORT}:7575"
+
+volumes:
+  homarr-data:
