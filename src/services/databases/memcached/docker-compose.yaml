@@ -1,0 +1,12 @@
+services:
+  memcached:
+    image: memcached:latest
+    container_name: ${CONTAINER_NAME}
+    restart: ${RESTART_POLICY}
+    ports:
+      - '${PORT}:11211'
+    volumes:
+      - memcached-data:/data
+
+volumes:
+  memcached-data:
