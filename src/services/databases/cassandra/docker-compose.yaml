@@ -1,0 +1,17 @@
+services:
+  cassandra:
+    image: cassandra:latest
+    container_name: ${CONTAINER_NAME}
+    restart: ${RESTART_POLICY}
+    environment:
+      CASSANDRA_CLUSTER_NAME: ${CASSANDRA_CLUSTER_NAME}
+      CASSANDRA_DC: ${CASSANDRA_DC}
+      CASSANDRA_RACK: ${CASSANDRA_RACK}
+      CASSANDRA_ENDPOINT_SNITCH: ${CASSANDRA_ENDPOINT_SNITCH}
+    ports:
+      - '${PORT}:9042'
+    volumes:
+      - cassandra-data:/var/lib/cassandra
+
+volumes:
+  cassandra-data:
