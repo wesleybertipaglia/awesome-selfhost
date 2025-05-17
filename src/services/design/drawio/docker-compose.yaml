@@ -1,0 +1,68 @@
+services:
+  plantuml-server:
+    image: plantuml/plantuml-server:latest
+    container_name: ${PLANTUML_CONTAINER_NAME}
+    restart: ${RESTART_POLICY}
+    ports:
+      - '${PLANTUML_PORT}:8080'
+    volumes:
+      - fonts_volume:/usr/share/fonts/drawio
+    networks:
+      - dokploy-network
+
+  image-export:
+    image: jgraph/export-server:latest
+    container_name: ${IMAGE_EXPORT_CONTAINER_NAME}
+    restart: ${RESTART_POLICY}
+    ports:
+      - '${IMAGE_EXPORT_PORT}:8000'
+    volumes:
+      - fonts_volume:/usr/share/fonts/drawio
+    environment:
+      - DRAWIO_BASE_URL=${DRAWIO_BASE_URL}
+    networks:
+      - dokploy-network
+
+  drawio:
+    image: jgraph/drawio:latest
+    container_name: ${DRAWIO_CONTAINER_NAME}
+    restart: ${RESTART_POLICY}
+    ports:
+      - '${DRAWIO_PORT}:8080'
+    depends_on:
+      - plantuml-server
+      - image-export
+    environment:
+      RAWIO_SELF_CONTAINED: "1"
+      DRAWIO_USE_HTTP: "1"
+      PLANTUML_URL: http://${PLANTUML_CONTAINER_NAME}:8080/
+      EXPORT_URL: http://${IMAGE_EXPORT_CONTAINER_NAME}:8000/
+      DRAWIO_BASE_URL: ${DRAWIO_BASE_URL}
+      DRAWIO_SERVER_URL: ${DRAWIO_SERVER_URL}
+      DRAWIO_CSP_HEADER: ${DRAWIO_CSP_HEADER}
+      DRAWIO_VIEWER_URL: ${DRAWIO_VIEWER_URL}
+      DRAWIO_LIGHTBOX_URL: ${DRAWIO_LIGHTBOX_URL}
+      DRAWIO_CONFIG: ${DRAWIO_CONFIG}
+      DRAWIO_GOOGLE_CLIENT_ID: ${DRAWIO_GOOGLE_CLIENT_ID}
+      DRAWIO_GOOGLE_APP_ID: ${DRAWIO_GOOGLE_APP_ID}
+      DRAWIO_GOOGLE_CLIENT_SECRET: ${DRAWIO_GOOGLE_CLIENT_SECRET}
+      DRAWIO_GOOGLE_VIEWER_CLIENT_ID: ${DRAWIO_GOOGLE_VIEWER_CLIENT_ID}
+      DRAWIO_GOOGLE_VIEWER_APP_ID: ${DRAWIO_GOOGLE_VIEWER_APP_ID}
+      DRAWIO_GOOGLE_VIEWER_CLIENT_SECRET: ${DRAWIO_GOOGLE_VIEWER_CLIENT_SECRET}
+      DRAWIO_MSGRAPH_CLIENT_ID: ${DRAWIO_MSGRAPH_CLIENT_ID}
+      DRAWIO_MSGRAPH_CLIENT_SECRET: ${DRAWIO_MSGRAPH_CLIENT_SECRET}
+      DRAWIO_MSGRAPH_TENANT_ID: ${DRAWIO_MSGRAPH_TENANT_ID}
+      DRAWIO_GITLAB_ID: ${DRAWIO_GITLAB_ID}
+      DRAWIO_GITLAB_SECRET: ${DRAWIO_GITLAB_SECRET}
+      DRAWIO_GITLAB_URL: ${DRAWIO_GITLAB_URL}
+      DRAWIO_CLOUD_CONVERT_APIKEY: ${DRAWIO_CLOUD_CONVERT_APIKEY}
+    networks:
+      - dokploy-network
+
+volumes:
+  fonts_volume:
+
+
+networks:
+  dokploy-network:
+    external: true
