@@ -1,0 +1,19 @@
+services:
+  couchbase:
+    image: couchbase:latest
+    container_name: ${CONTAINER_NAME}
+    restart: ${RESTART_POLICY}
+    environment:
+      COUCHBASE_ADMINISTRATOR_USERNAME: ${CB_ADMIN_USERNAME}
+      COUCHBASE_ADMINISTRATOR_PASSWORD: ${CB_ADMIN_PASSWORD}
+      COUCHBASE_BUCKET: ${CB_BUCKET}
+      COUCHBASE_BUCKET_RAMSIZE: ${CB_BUCKET_RAMSIZE}
+    ports:
+      - '${PORT}:8091'
+      - '${PORT_KV}:11210'
+      - '${PORT_N1QL}:8093'
+    volumes:
+      - couchbase-data:/opt/couchbase/var
+
+volumes:
+  couchbase-data:
