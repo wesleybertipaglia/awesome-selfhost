@@ -1,0 +1,13 @@
+services:
+  mongo-express:
+    image: mongo-express:latest
+    container_name: ${CONTAINER_NAME}
+    restart: ${RESTART_POLICY}
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      ME_CONFIG_MONGODB_URL: "mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@${MONGO_CONTAINER_NAME}:27017/"
+    ports:
+      - '${PORT}:8081'
+    depends_on:
+      - ${MONGO_CONTAINER_NAME}
