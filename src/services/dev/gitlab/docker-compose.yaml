@@ -1,0 +1,38 @@
+services:
+  gitea:
+    image: gitea/gitea:${GITEA_TAG}
+    container_name: ${GITEA_CONTAINER_NAME}
+    restart: ${RESTART_POLICY}
+    environment:
+      - USER_UID=${USER_UID}
+      - USER_GID=${USER_GID}
+      - GITEA__database__DB_TYPE=postgres
+      - GITEA__database__HOST=${DB_CONTAINER_NAME}:${DB_PORT}
+      - GITEA__database__NAME=${DB_NAME}
+      - GITEA__database__USER=${DB_USER}
+      - GITEA__database__PASSWD=${DB_PASSWORD}
+    volumes:
+      - gitea-server-data:/data
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    depends_on:
+      - db
+    ports:
+      - '${GITEA_PORT}:3000'
+
+  db:
+    image: postgres:${DB_TAG}
+    container_name: ${DB_CONTAINER_NAME}
+    restart: ${RESTART_POLICY}
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    volumes:
+      - gitea-db-data:/var/lib/postgresql/data
+    ports:
+      - '${DB_PORT}:5432'
+
+volumes:
+  gitea-server-data:
+  gitea-db-data:
