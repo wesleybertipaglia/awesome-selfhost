@@ -16,6 +16,7 @@ The purpose of this project is to showcase alternatives to common daily-use appl
 
 ## 📂 Categories
 
+* **[AI](./src/services/ai)**: AI tools and services for various applications
 * **[CMS](./src/services/cms)**: Content Management Systems such as WordPress or Ghost
 * **[Databases](./src/services/databases)**: Various database systems for data storage and management
 * **[Design](./src/services/design)**: Tools for design and creativity workflows
