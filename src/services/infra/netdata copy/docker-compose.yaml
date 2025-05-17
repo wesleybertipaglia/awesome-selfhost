@@ -1,0 +1,16 @@
+services:
+  nagios:
+    image: jasonrivers/nagios:${NAGIOS_TAG}
+    container_name: ${NAGIOS_CONTAINER_NAME}
+    restart: ${RESTART_POLICY}
+    ports:
+      - "${NAGIOS_PORT}:80"
+    volumes:
+      - nagios-config:/opt/nagios/etc
+      - nagios-logs:/opt/nagios/var/log
+      - nagios-data:/opt/nagios/var
+
+volumes:
+  nagios-config:
+  nagios-logs:
+  nagios-data:
