@@ -1,0 +1,14 @@
+services:
+  loki:
+    image: grafana/loki:${LOKI_TAG}
+    container_name: ${LOKI_CONTAINER_NAME}
+    restart: ${RESTART_POLICY}
+    ports:
+      - "${LOKI_PORT}:3100"
+    volumes:
+      - loki-data:/loki
+      - ./loki-config.yaml:/etc/loki/local-config.yaml:ro
+    command: -config.file=/etc/loki/local-config.yaml
+
+volumes:
+  loki-data:
