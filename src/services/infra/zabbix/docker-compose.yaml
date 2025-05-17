@@ -1,0 +1,49 @@
+services:
+  zabbix-server:
+    image: zabbix/zabbix-server-pgsql:${ZABBIX_TAG}
+    container_name: ${ZABBIX_SERVER_CONTAINER_NAME}
+    restart: ${RESTART_POLICY}
+    environment:
+      - DB_SERVER_HOST=zabbix-postgres
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - ZBX_JAVAGATEWAY_ENABLE=false
+    depends_on:
+      - zabbix-postgres
+    ports:
+      - "${ZABBIX_SERVER_PORT}:10051"
+    volumes:
+      - zabbix-server-data:/var/lib/zabbix
+
+  zabbix-web:
+    image: zabbix/zabbix-web-nginx-pgsql:${ZABBIX_TAG}
+    container_name: ${ZABBIX_WEB_CONTAINER_NAME}
+    restart: ${RESTART_POLICY}
+    depends_on:
+      - zabbix-server
+      - zabbix-postgres
+    environment:
+      - DB_SERVER_HOST=zabbix-postgres
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - ZBX_SERVER_HOST=zabbix-server
+    ports:
+      - "${ZABBIX_WEB_PORT}:8080"
+    volumes:
+      - zabbix-web-data:/var/lib/zabbix
+
+  zabbix-postgres:
+    image: postgres:latest
+    container_name: ${POSTGRES_CONTAINER_NAME}
+    restart: ${RESTART_POLICY}
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+volumes:
+  zabbix-server-data:
+  zabbix-web-data:
+  postgres-data:
